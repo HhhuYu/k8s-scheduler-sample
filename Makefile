@@ -1,7 +1,11 @@
 BIN_DIR=_output/bin
 
 # If tag not explicitly set in users default to the git sha.
-TAG ?= ${shell (git describe --tags --abbrev=14 | sed "s/-g\([0-9a-f]\{14\}\)$/+\1/") 2>/dev/null || git rev-parse --verify --short HEAD}
+# TAG ?= ${shell (git describe --tags --abbrev=14 | sed "s/-g\([0-9a-f]\{14\}\)$/+\1/") 2>/dev/null || git rev-parse --verify --short HEAD}
+
+NS = charstal
+TAG = 0.0.1
+REPO = k8s-scheduler
 
 .EXPORT_ALL_VARIABLES:
 
@@ -17,7 +21,10 @@ build-linux: init
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o=${BIN_DIR}/scheduler-framework-sample ./cmd/scheduler
 
 image: build-linux
-	docker build --no-cache . -t scheduler-framework-sample:$(TAG)
+	docker build --no-cache . -t $(NS)/$(REPO):$(TAG)
+
+push: image
+	docker push $(NS)/$(REPO):$(TAG)
 
 update:
 	go mod download
