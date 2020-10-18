@@ -4,7 +4,7 @@ BIN_DIR=_output/bin
 # TAG ?= ${shell (git describe --tags --abbrev=14 | sed "s/-g\([0-9a-f]\{14\}\)$/+\1/") 2>/dev/null || git rev-parse --verify --short HEAD}
 
 NS = charstal
-TAG = 0.0.1
+TAG = v0.0.1
 REPO = k8s-scheduler
 
 .EXPORT_ALL_VARIABLES:
