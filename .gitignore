@@ -1,0 +1,16 @@
+# Vscode files
+.vscode
+
+# This is where the result of the go build goes
+/output*/
+/_output*/
+/_output
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# make-related metadata
+/.make/
+
+# Test binary, build with `go test -c`
+*.test
