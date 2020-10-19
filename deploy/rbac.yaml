@@ -1,7 +1,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: sample-cr
+  name: demo-cr
 rules:
   - apiGroups:
       - ""
@@ -15,7 +15,7 @@ rules:
   - apiGroups:
       - ""
     resourceNames:
-      - scheduler-framework-sample
+      - scheduler-framework-demo
     resources:
       - endpoints
     verbs:
@@ -136,19 +136,19 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: sample-sa
+  name: demo-sa
   namespace: kube-system
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: sample-crb
+  name: demo-crb
   namespace: kube-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: sample-cr
+  name: demo-cr
 subjects:
   - kind: ServiceAccount
-    name: sample-sa
+    name: demo-sa
     namespace: kube-system

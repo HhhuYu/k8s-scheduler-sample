@@ -1,4 +1,4 @@
-package sampleplugin
+package demoplugin
 
 import (
 	v1 "k8s.io/api/core/v1"
@@ -9,7 +9,7 @@ import (
 
 const (
 	// Name plugins name
-	Name = "sampleplugin"
+	Name = "demoplugin"
 )
 
 // Args config args
@@ -18,34 +18,34 @@ type Args struct {
 	Master     string `json:"master,omitempty"`
 }
 
-// SamplePlugin object
-type SamplePlugin struct {
+// DemoPlugin object
+type DemoPlugin struct {
 	args   *Args
 	handle framework.FrameworkHandle
 }
 
 var (
-	_ framework.FilterPlugin  = &SamplePlugin{}
-	_ framework.PreBindPlugin = &SamplePlugin{}
+	_ framework.FilterPlugin  = &DemoPlugin{}
+	_ framework.PreBindPlugin = &DemoPlugin{}
 )
 
 // Name plugins name
-func (s *SamplePlugin) Name() string {
+func (s *DemoPlugin) Name() string {
 	return Name
 }
 
 // Filter plugins interface
-func (s *SamplePlugin) Filter(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
+func (s *DemoPlugin) Filter(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
 	klog.V(3).Infof("filter pod: %v", pod.Name)
 	return framework.NewStatus(framework.Success, "")
 }
 
 // PreBind plugins interface
-func (s *SamplePlugin) PreBind(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
-	nodeInfo, ok := s.handle.NodeInfoSnapshot().NodeInfoMap["nodeName"]
-	if !ok {
-		return framework.NewStatus(framework.Error, "can't find")
-	}
+func (s *DemoPlugin) PreBind(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
+	nodeInfo, _ := s.handle.NodeInfoSnapshot().NodeInfoMap["nodeName"]
+	// if !ok {
+	// 	return framework.NewStatus(framework.Error, "can't find")
+	// }
 	klog.V(3).Infof("prebind node info: %+v", nodeInfo.Node())
 	return framework.NewStatus(framework.Success, "")
 }
@@ -57,7 +57,7 @@ func New(plArgs *runtime.Unknown, handle framework.FrameworkHandle) (framework.P
 		return nil, err
 	}
 	klog.V(3).Infof("####-> args: <-#### %+v", args)
-	return &SamplePlugin{
+	return &DemoPlugin{
 		args:   args,
 		handle: handle,
 	}, nil

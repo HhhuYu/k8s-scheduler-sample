@@ -1,7 +1,7 @@
 package plugins
 
 import (
-	"github.com/HhhuYu/schedule-framework/pkg/plugins/sampleplugin"
+	"github.com/HhhuYu/schedule-framework/pkg/plugins/demoplugin"
 	"github.com/spf13/cobra"
 	"k8s.io/kubernetes/cmd/kube-scheduler/app"
 )
@@ -9,6 +9,6 @@ import (
 // Register custmor plugins register
 func Register() *cobra.Command {
 	return app.NewSchedulerCommand(
-		app.WithPlugin(sampleplugin.Name, sampleplugin.New),
+		app.WithPlugin(demoplugin.Name, demoplugin.New),
 	)
 }

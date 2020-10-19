@@ -7,40 +7,40 @@ data:
   scheduler-config.yaml: |
     apiVersion: kubescheduler.config.k8s.io/v1alpha1
     kind: KubeSchedulerConfiguration
-    schedulerName: scheduler-framework-sample
+    schedulerName: scheduler-framework-demo
     leaderElection:
       leaderElect: true
-      lockObjectName: scheduler-framework-sample
+      lockObjectName: scheduler-framework-demo
       lockObjectNamespace: kube-system
     plugins:
       filter:
         enabled:
-        - name: "sampleplugin"
+        - name: "demoplugin"
       preBind:
         enabled:
-        - name: "sampleplugin"
+        - name: "demoplugin"
     pluginConfig:
-    - name: "sample"
+    - name: "demoplugin"
       args: {"master": "master", "kubeconfig": "kubeconfig"}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scheduler-framework-sample
+  name: scheduler-framework-demo
   namespace: kube-system
   labels:
-    component: scheduler-framework-sample
+    component: scheduler-framework-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: scheduler-framework-sample
+      component: scheduler-framework-demo
   template:
     metadata:
       labels:
-        component: scheduler-framework-sample
+        component: scheduler-framework-demo
     spec:
-      serviceAccount: sample-sa
+      serviceAccount: demo-sa
       priorityClassName: system-cluster-critical
       volumes:
       - name: scheduler-config
@@ -48,12 +48,12 @@ spec:
           name: scheduler-config
       containers:
       - name: scheduler-ctrl
-        image: scheduler-framework-sample:f99aae8
+        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.3
         imagePullPolicy: IfNotPresent
         args:
-        - scheduler-framework-sample
+        - scheduler-framework-demo
         - --config=/scheduler/scheduler-config.yaml
-        - --v=3
+        - --v=5
         resources:
           requests:
             cpu: "50m"

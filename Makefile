@@ -15,10 +15,10 @@ init:
 	mkdir -p ${BIN_DIR}
 
 local: init
-	go build -o=${BIN_DIR}/scheduler-framework-sample ./cmd/scheduler
+	go build -o=${BIN_DIR}/scheduler-framework-demo ./cmd/scheduler
 
 build-linux: init
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o=${BIN_DIR}/scheduler-framework-sample ./cmd/scheduler
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o=${BIN_DIR}/scheduler-framework-demo ./cmd/scheduler
 
 image: build-linux
 	docker build --no-cache . -t $(NS)/$(REPO):$(TAG)
