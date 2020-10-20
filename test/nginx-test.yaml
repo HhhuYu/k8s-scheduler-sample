@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-scheduler
+  name: scheduler-test-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: test-scheduler
+      app: scheduler-test
   template:
     metadata:
       labels:
-        app: test-scheduler
+        app: scheduler-test
     spec:
       # schedulerName 对应于自身定义的调度器的名称
       schedulerName: scheduler-framework-demo

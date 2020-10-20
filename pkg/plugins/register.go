@@ -6,7 +6,7 @@ import (
 	"k8s.io/kubernetes/cmd/kube-scheduler/app"
 )
 
-// Register custmor plugins register
+// Register custom plugins register
 func Register() *cobra.Command {
 	return app.NewSchedulerCommand(
 		app.WithPlugin(demoplugin.Name, demoplugin.New),
