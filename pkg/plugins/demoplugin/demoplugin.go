@@ -1,6 +1,8 @@
 package demoplugin
 
 import (
+	"sync"
+
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog"
@@ -22,31 +24,57 @@ type Args struct {
 type DemoPlugin struct {
 	args   *Args
 	handle framework.FrameworkHandle
+
+	numRuns int
+	dpState map[int]string
+	mu      sync.RWMutex
 }
 
 var (
 	_ framework.FilterPlugin  = &DemoPlugin{}
 	_ framework.PreBindPlugin = &DemoPlugin{}
+	_ framework.ReservePlugin = &DemoPlugin{}
 )
 
 // Name plugins name
-func (s *DemoPlugin) Name() string {
+func (dp *DemoPlugin) Name() string {
 	return Name
 }
 
+// Reserve Reserve extenders
+func (dp *DemoPlugin) Reserve(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
+	if pod == nil {
+		return framework.NewStatus(framework.Error, "pod cannot be nil")
+	}
+
+	if pod.Name == "pod-test" {
+		pc.Lock()
+		pc.Write(framework.ContextKey(pod.Name), "never bind")
+		pc.Unlock()
+
+	}
+
+	return nil
+}
+
 // Filter plugins interface
-func (s *DemoPlugin) Filter(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
+func (dp *DemoPlugin) Filter(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
 	klog.V(3).Infof("filter pod: %v", pod.Name)
+	if pod.Name == "pod-test" {
+		return framework.NewStatus(framework.Error, "the pod-test cannot pass")
+	}
 	return framework.NewStatus(framework.Success, "")
 }
 
 // PreBind plugins interface
-func (s *DemoPlugin) PreBind(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
-	nodeInfo, _ := s.handle.NodeInfoSnapshot().NodeInfoMap["nodeName"]
-	// if !ok {
-	// 	return framework.NewStatus(framework.Error, "can't find")
-	// }
-	klog.V(3).Infof("prebind node info: %+v", nodeInfo.Node())
+func (dp *DemoPlugin) PreBind(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
+
+	dp.mu.Lock()
+	defer dp.mu.Unlock()
+
+	if pod == nil {
+		return framework.NewStatus(framework.Error, "pod must not be nil")
+	}
 	return framework.NewStatus(framework.Success, "")
 }
 
