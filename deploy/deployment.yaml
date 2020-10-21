@@ -16,12 +16,18 @@ data:
       filter:
         enabled:
         - name: "demoplugin"
+        - name: "nodelabel"
       preBind:
         enabled:
         - name: "demoplugin"
+      score:
+        enabled:
+        - name: "nodelabel"
     pluginConfig:
     - name: "demoplugin"
       args: {"master": "master", "kubeconfig": "kubeconfig"}
+    - name: "nodelabel"
+      args: {"master": "master", "kubeconfig": "kubeconfig", LabelsPreference: ["like", "love"], LabelsAvoid: ["dislike"]}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -48,7 +54,7 @@ spec:
           name: scheduler-config
       containers:
       - name: scheduler-ctrl
-        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.4
+        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.7
         imagePullPolicy: IfNotPresent
         args:
         - scheduler-framework-demo
