@@ -56,7 +56,7 @@ func (nl *NodeLabel) Filter(pc *framework.PluginContext, pod *v1.Pod, nodeName s
 		return true
 	}
 	if check(nl.args.LabelsPreference, true) && check(nl.args.LabelsAvoid, false) {
-		return nil
+		return framework.NewStatus(framework.Success, "")
 	}
 
 	return framework.NewStatus(framework.UnschedulableAndUnresolvable, Error)
@@ -77,7 +77,13 @@ func (nl *NodeLabel) Score(pc *framework.PluginContext, p *v1.Pod, nodeName stri
 		}
 	}
 
-	score /= int(len(nl.args.LabelsPreference))
+	for _, label := range nl.args.LabelsAvoid {
+		if !labels.Set(node.Labels).Has(label) {
+			score += framework.MaxNodeScore
+		}
+	}
+
+	score /= int(len(nl.args.LabelsPreference) + len(nl.args.LabelsAvoid))
 	klog.V(3).Infof("pod %+v, node %+v, score: %+v", p.Name, nodeName, score)
 	return score, nil
 }

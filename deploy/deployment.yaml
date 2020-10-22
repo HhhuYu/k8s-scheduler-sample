@@ -27,7 +27,7 @@ data:
     - name: "demoplugin"
       args: {"master": "master", "kubeconfig": "kubeconfig"}
     - name: "nodelabel"
-      args: {"master": "master", "kubeconfig": "kubeconfig", LabelsPreference: ["like", "love"], LabelsAvoid: ["dislike"]}
+      args: {"master": "master", "kubeconfig": "kubeconfig", labelspreference: ["like", "love"], labelsavoid: ["dislike"]}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -54,7 +54,7 @@ spec:
           name: scheduler-config
       containers:
       - name: scheduler-ctrl
-        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.7
+        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.8
         imagePullPolicy: IfNotPresent
         args:
         - scheduler-framework-demo
