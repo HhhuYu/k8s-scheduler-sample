@@ -51,8 +51,9 @@ func (dp *DemoPlugin) Reserve(pc *framework.PluginContext, pod *v1.Pod, nodeName
 		pc.Lock()
 		pc.Write(framework.ContextKey(pod.Name), "never bind")
 		pc.Unlock()
-
 	}
+
+	klog.V(3).Infof("Write pod ", pod.Name, " in ContextKey")
 
 	return nil
 }
