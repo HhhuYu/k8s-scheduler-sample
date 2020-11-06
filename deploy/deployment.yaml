@@ -54,7 +54,7 @@ spec:
           name: scheduler-config
       containers:
       - name: scheduler-ctrl
-        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.8
+        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.11
         imagePullPolicy: IfNotPresent
         args:
         - scheduler-framework-demo
