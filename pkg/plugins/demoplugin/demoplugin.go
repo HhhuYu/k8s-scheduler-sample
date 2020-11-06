@@ -75,8 +75,9 @@ func loadCA(caFile string) *x509.CertPool {
 // Get Http get
 func Get(url string) string {
 
-	// 超时时间：5秒
-	client := &http.Client{Timeout: 5 * time.Second,
+	client := &http.Client{
+		// 超时时间：5秒
+		Timeout: 5 * time.Second,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{RootCAs: loadCA("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")},
 		}}
