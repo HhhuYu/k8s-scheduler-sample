@@ -1,17 +1,7 @@
 package demoplugin
 
 import (
-	"bytes"
-	"crypto/tls"
-	"crypto/x509"
-	"fmt"
-	"io"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"os"
 	"sync"
-	"time"
 
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -53,58 +43,6 @@ func (dp *DemoPlugin) Name() string {
 	return Name
 }
 
-func getURL() string {
-	host := os.Getenv("KUBERNETES_SERVICE_HOST")
-	port := os.Getenv("KUBERRETES_SERVICE_PORT")
-	url := fmt.Sprintf("https://%s:%s/apis/metrics.k8s.io/v1beta1/nodes", host, port)
-	// url := "https://" + HOST + ":" + PORT + "/apis/metrics.k8s.io/v1beta1/nodes"
-	return url
-}
-
-func loadCA(caFile string) *x509.CertPool {
-	pool := x509.NewCertPool()
-
-	if ca, e := ioutil.ReadFile(caFile); e != nil {
-		log.Fatal("ReadFile: ", e)
-	} else {
-		pool.AppendCertsFromPEM(ca)
-	}
-	return pool
-}
-
-// Get Http get
-func Get(url string) string {
-
-	client := &http.Client{
-		// 超时时间：5秒
-		Timeout: 5 * time.Second,
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{RootCAs: loadCA("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt")},
-		}}
-	req, err := http.NewRequest("GET", url, nil)
-	token, err := ioutil.ReadFile("/var/run/secrets/kubernetes.io/serviceaccount/token")
-	req.Header.Add("Authorization", `Bearer `+string(token))
-
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-	var buffer [512]byte
-	result := bytes.NewBuffer(nil)
-	for {
-		n, err := resp.Body.Read(buffer[0:])
-		result.Write(buffer[0:n])
-		if err != nil && err == io.EOF {
-			break
-		} else if err != nil {
-			panic(err)
-		}
-	}
-
-	return result.String()
-}
-
 // Reserve Reserve extenders
 func (dp *DemoPlugin) Reserve(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
 	if pod == nil {
@@ -126,8 +64,15 @@ func (dp *DemoPlugin) Reserve(pc *framework.PluginContext, pod *v1.Pod, nodeName
 func (dp *DemoPlugin) Filter(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
 	klog.V(3).Infof("filter pod: %v", pod.Name)
 
-	metricsInfo := Get(getURL())
-	klog.V(3).Infof("metrics-server-info: %v", metricsInfo)
+	// metricsinfo, err := metrics.GetMetricsInfo()
+	// if err == nil {
+	// 	klog.V(3).Infof("metricsinfo: %v", metricsinfo)
+	// }
+
+	// nodeinfo, err := metrics.GetNodeInfo()
+	// if err == nil {
+	// 	klog.V(3).Infof("nodeinfo: %v", nodeinfo)
+	// }
 
 	if pod.Name == "pod-test" {
 		return framework.NewStatus(framework.Error, "the pod-test cannot pass")
