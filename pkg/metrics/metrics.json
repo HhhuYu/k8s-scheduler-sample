@@ -1,0 +1,15 @@
+{
+  "kind": "NodeMetrics",
+  "apiVersion": "metrics.k8s.io/v1beta1",
+  "metadata": {
+    "name": "k8s-1",
+    "selfLink": "/apis/metrics.k8s.io/v1beta1/nodes/k8s-1",
+    "creationTimestamp": "2020-11-04T01:01:56Z"
+  },
+  "timestamp": "2020-11-04T01:00:56Z",
+  "window": "30s",
+  "usage": {
+    "cpu": "93777356n",
+    "memory": "747288Ki"
+  }
+}

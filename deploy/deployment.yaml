@@ -22,7 +22,7 @@ data:
         - name: "demoplugin"
       score:
         enabled:
-        - name: "nodelabel"
+        - name: "scoreplugin"
     pluginConfig:
     - name: "demoplugin"
       args: {"master": "master", "kubeconfig": "kubeconfig"}

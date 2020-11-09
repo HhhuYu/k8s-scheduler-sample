@@ -1,48 +1,34 @@
 package metrics
 
-import "github.com/HhhuYu/schedule-framework/pkg/utils"
+import (
+	"encoding/json"
 
-// MetricsInfoMap node metrics info map
-type MetricsInfoMap map[string]Resource
-
-// NodeInfoMap node allocatable info map
-type NodeInfoMap map[string]Resource
-
-// NodeScoreMap Node score map
-type NodeScoreMap map[string]float64
-
-// Resource node resource include cpu & memory
-type Resource struct {
-	cpu    uint64
-	memory uint64
-}
+	"github.com/HhhuYu/schedule-framework/pkg/utils"
+)
 
 const (
 	metricsAPI = "apis/metrics.k8s.io/v1beta1/nodes"
-	nodeAPI    = "api/v1/nodes"
 )
 
-func parseMetricsInfo(metricsInfoSource string) (MetricsInfoMap, error) {
+func parseMetricsInfo(metricsInfoSource string) (Metrics, error) {
+	var metricsInfo = Metrics{}
 
-	return MetricsInfoMap{}, nil
+	json.Unmarshal([]byte(metricsInfoSource), &metricsInfo)
+
+	return metricsInfo, nil
 }
 
 // GetMetricsInfo get metics info
-func GetMetricsInfo() (string, error) {
-	metricsInfoSource, err := utils.GetInfo(metricsAPI)
+func GetMetricsInfo(nodeName string) (Metrics, error) {
+	metricsInfoSource, err := utils.GetInfo(metricsAPI + `/` + nodeName)
 	if err != nil {
-		return "", err
+		return Metrics{}, err
 	}
 
-	return metricsInfoSource, nil
-}
-
-// GetNodeInfo get metics info
-func GetNodeInfo() (string, error) {
-	nodeInfoSource, err := utils.GetInfo(nodeAPI)
+	metricsInfo, err := parseMetricsInfo(metricsInfoSource)
 	if err != nil {
-		return "", err
+		return Metrics{}, err
 	}
 
-	return nodeInfoSource, nil
+	return metricsInfo, nil
 }

@@ -64,16 +64,6 @@ func (dp *DemoPlugin) Reserve(pc *framework.PluginContext, pod *v1.Pod, nodeName
 func (dp *DemoPlugin) Filter(pc *framework.PluginContext, pod *v1.Pod, nodeName string) *framework.Status {
 	klog.V(3).Infof("filter pod: %v", pod.Name)
 
-	// metricsinfo, err := metrics.GetMetricsInfo()
-	// if err == nil {
-	// 	klog.V(3).Infof("metricsinfo: %v", metricsinfo)
-	// }
-
-	// nodeinfo, err := metrics.GetNodeInfo()
-	// if err == nil {
-	// 	klog.V(3).Infof("nodeinfo: %v", nodeinfo)
-	// }
-
 	if pod.Name == "pod-test" {
 		return framework.NewStatus(framework.Error, "the pod-test cannot pass")
 	}
