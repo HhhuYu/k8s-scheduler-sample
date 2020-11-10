@@ -35,7 +35,7 @@ func (c Usage) GetValue() (int64, int64, error) {
 	}
 	cpuUnit := str[2]
 	if cpuUnit == `n` {
-		cpuValue /= 100000
+		cpuValue /= 1000000
 	}
 
 	str = re.FindStringSubmatch(c.Memory)

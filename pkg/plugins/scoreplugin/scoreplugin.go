@@ -12,7 +12,7 @@ import (
 
 const (
 	// Name score plugin name
-	Name = "scoreplugin"
+	Name = "moscoreplugin"
 )
 
 type Args struct {
