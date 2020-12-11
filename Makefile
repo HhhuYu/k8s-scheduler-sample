@@ -1,8 +1,8 @@
 BIN_DIR=_output/bin
 
-REG = registry.cn-hangzhou.aliyuncs.com
+REG = registry.cn-shanghai.aliyuncs.com
 NS = charstal
-TAG = v0.0.3
+TAG = v0.0.1
 REPO = k8s-scheduler
 
 .EXPORT_ALL_VARIABLES:
