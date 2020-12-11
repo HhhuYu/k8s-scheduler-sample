@@ -12,7 +12,8 @@ import (
 
 const (
 	// Name score plugin name
-	Name = "moscoreplugin"
+	Name    = "moscoreplugin"
+	version = "0.0.1"
 )
 
 type Args struct {
@@ -59,7 +60,9 @@ func New(plArgs *runtime.Unknown, handle framework.FrameworkHandle) (framework.P
 	if err := framework.DecodeInto(plArgs, args); err != nil {
 		return nil, err
 	}
-	klog.V(3).Infof("####-> args: <-#### %+v", args)
+	klog.V(3).Infof("Args: %+v", args)
+
+	klog.V(3).Infof("Scoring plugin version: %s", version)
 	return &ScorePlugin{
 		args:   args,
 		handle: handle,

@@ -13,16 +13,16 @@ data:
       lockObjectName: scheduler-framework-demo
       lockObjectNamespace: kube-system
     plugins:
-      filter:
-        enabled:
-        - name: "demoplugin"
-        - name: "nodelabel"
-      preBind:
-        enabled:
-        - name: "demoplugin"
+      # filter:
+      #   enabled:
+      #   - name: "demoplugin"
+      #   - name: "nodelabel"
+      # preBind:
+      #   enabled:
+      #   - name: "demoplugin"
       score:
         enabled:
-        - name: "scoreplugin"
+        - name: "moscoreplugin"
     pluginConfig:
     - name: "demoplugin"
       args: {"master": "master", "kubeconfig": "kubeconfig"}
@@ -54,7 +54,7 @@ spec:
           name: scheduler-config
       containers:
       - name: scheduler-ctrl
-        image: registry.cn-hangzhou.aliyuncs.com/charstal/k8s-scheduler:v0.0.11
+        image: registry.cn-shanghai.aliyuncs.com/charstal/k8s-scheduler:v0.0.1
         imagePullPolicy: IfNotPresent
         args:
         - scheduler-framework-demo

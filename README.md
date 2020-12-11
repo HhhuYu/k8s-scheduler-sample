@@ -1,6 +1,17 @@
 # kubernetes-scheduler-framework-demo
 
->kubenetes 1.15 ~ 1.16.15 (不知道为啥1.15版本可以，接口对不上)
+## requirement
+
+mertics-server
+
+## plugin
+
+- demoplugin  
+主要用来测试
+- nodelabel  
+nodelabel selector
+- socreplugin  
+score计算优先级
 
 ## Deploy
 
